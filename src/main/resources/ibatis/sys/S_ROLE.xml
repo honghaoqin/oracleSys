@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_ROLE">
+	<!-- 查询记录，同时查出创建人名称 -->
+	<select id="list" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT
+		a.ROLE_ID,a.NAME,a.UPDATED_DATE,a.UPDATED_BY,a.CREATED_DATE,a.CREATED_BY 
+		<isNotEmpty prepend=" " property="JOIN_COL">$JOIN_COL$</isNotEmpty>
+		FROM S_ROLE a
+		 <isNotEmpty prepend=" " property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_ROLE a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<select id="exists" parameterClass="hashmap" resultClass="java.lang.Boolean">
+		SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_ROLE a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="hashmap">
+		
+		INSERT INTO S_ROLE a
+		(ROLE_ID,NAME,CREATED_DATE,CREATED_BY)
+		VALUES
+		(#ROLE_ID#,#NAME#,#CREATED_DATE#,#sessionUser.USER_ID#)
+	</insert>
+
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_ROLE 
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="NAME">
+				NAME = #NAME#
+			</isNotNull>
+		
+			<isNotNull prepend="," property="sessionUser">
+				UPDATED_BY =
+				#sessionUser.USER_ID#
+			</isNotNull>
+		   <isNotNull prepend="," property="UPDATED_DATE">
+				UPDATED_DATE=#UPDATED_DATE#
+			</isNotNull>
+
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</update>
+
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM S_ROLE 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</delete>
+
+
+	<!--删除角色权限 -->
+	<delete id="deleteRoleAuth" parameterClass="hashmap">
+		DELETE FROM S_ROLE_AUTH 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</delete>
+	<!--增加角色权限 -->
+	<insert id="insertRoleAuth" parameterClass="hashmap">
+		INSERT INTO
+		S_ROLE_AUTH a (ROLE_ID,AUTH_ID) VALUES (#ROLE_ID#,#AUTH_ID#)
+	</insert>
+	<!--查找用户的角色(checked：已分配1；否则0.) -->
+	<select id="selectRole" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT distinct
+		a.ROLE_ID,a.NAME,a.UPDATED_DATE,a.UPDATED_BY,a.CREATED_DATE,a.CREATED_BY,DECODE (d.ROLE_ID, null, '0', '1') as checked
+		FROM S_ROLE a
+		left join (select ROLE_ID from S_ROLE_USER where USER_ID=#USER_ID#) d on
+		(a.ROLE_ID = d.ROLE_ID)
+		order by a.ROLE_ID
+	</select>
+	<!--查找用户已分配的角色 -->
+	<select id="viewRole" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT distinct
+		a.ROLE_ID,a.NAME,a.UPDATED_DATE,a.UPDATED_BY,a.CREATED_DATE, a.CREATED_BY
+		FROM S_ROLE a
+		join S_ROLE_USER c on (a.ROLE_ID = c.ROLE_ID)
+		where c.USER_ID=#USER_ID#
+		order by a.ROLE_ID
+	</select>
+
+
+	<!--删除角色用户 -->
+	<delete id="deleteRoleUser" parameterClass="hashmap">
+		DELETE FROM S_ROLE_USER 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</delete>
+	<!--增加角色用户 -->
+	<insert id="insertRoleUser" parameterClass="hashmap">
+		INSERT INTO S_ROLE_USER  (ROLE_ID,USER_ID) VALUES (#ROLE_ID#,#USER_ID#)
+	</insert>
+	<!--复制角色权限 -->
+	<insert id="copyRoleAuth" parameterClass="hashmap">
+		INSERT INTO S_ROLE_AUTH (AUTH_ID,ROLE_ID) select distinct
+		AUTH_ID,'$ROLEID$' from S_ROLE_AUTH a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</insert>
+
+
+
+</sqlMap>

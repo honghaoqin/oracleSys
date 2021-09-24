@@ -1,0 +1,22 @@
+
+连接到: Oracle Database 11g Enterprise Edition Release 11.2.0.1.0 - 64bit Production
+With the Partitioning, OLAP, Data Mining and Real Application Testing options
+
+经由常规路径由 EXPORT:V10.02.01 创建的导出文件
+已经完成 ZHS16GBK 字符集和 AL16UTF16 NCHAR 字符集中的导入
+. 正在将 LIBYSYS 的对象导入到 LIBYSYS
+. . 正在导入表                   "S_AUDIT_LOG"导入了           8 行
+. . 正在导入表                        "S_AUTH"导入了          43 行
+. . 正在导入表                        "S_DEPT"导入了           1 行
+. . 正在导入表                        "S_DICT"导入了          28 行
+. . 正在导入表                        "S_FILE"导入了           0 行
+. . 正在导入表                       "S_GROUP"导入了           0 行
+. . 正在导入表                  "S_GROUP_USER"导入了           0 行
+. . 正在导入表                         "S_JOB"导入了           2 行
+. . 正在导入表                   "S_LOGIN_LOG"导入了         203 行
+. . 正在导入表                        "S_ROLE"导入了           0 行
+. . 正在导入表                   "S_ROLE_AUTH"导入了           0 行
+. . 正在导入表                   "S_ROLE_USER"导入了           0 行
+. . 正在导入表                        "S_STAT"导入了           1 行
+. . 正在导入表                        "S_USER"导入了          14 行
+成功终止导入, 没有出现警告。

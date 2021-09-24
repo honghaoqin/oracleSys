@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+  	
+    <package name="upload" extends="ssi-default" namespace="/upload">
+		
+		<!-- com.ssi.upload.action.UploadAction的list方法通过URL访问的路径是 /upload/Upload/list.do -->
+		<action name="*/*" method="{2}" class="com.ssi.upload.action.{1}Action">
+		    <result name="*" type="routing"></result>
+		</action>
+				
+    </package>
+    
+</struts>

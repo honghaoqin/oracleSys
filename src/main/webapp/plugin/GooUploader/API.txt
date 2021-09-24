@@ -1,0 +1,75 @@
+花生米AJAX-UI系列之:基于JQUERY的文件上传控件0.1版
+特点：
+	可设定为是否单个上传,或者是批量上传;
+	可在上传过程中取消上传(单个或者批量取消);
+	在批量选择文件后,可以手工选择上传其中部分文件;
+	可在上传文件时顺带上传REQUEST传参,如SESSION_ID;
+	选择批量文件,在上传前,用户还可删除其中几个不想上传的文件;
+	本控件是对swfUpload这个FLASH插件的二次包装，控件类对象中的一个内部元素即为一个SWFUpload对象，可对其中进行相应的操作（详见附送的SWFUpload V2_2_0 说明文档.htm）
+	本控件内置一个保存了文件列表信息的数组$fileList，其单元为JSON对象，保存了每个文件的ID，名称，类型，大小等信息；
+	可自定义按钮显示文字，文件上传的服务器端地址，以及SWF控件相对于当前网页的相对路径
+	本个控件包是建立在JSP基础上为大家展示上传效的，但实际该控件有用的部分仅在客户端前台;后台代码可以全部推翻，重新用PHP，.NET等其它动态语言编写
+	使用了本控件后，在后台编写代码时，不必编写实时监控文件上传进度的复杂代码，只用编写简单的处理保存上传文件的代码即可，因为FLASH插件会自动帮助算出上传进度，并实时定时给控件提供进度显示数据，这样就减轻了后台开发人员的工作量；
+	基于上一点，本控件前台也不会以长轮询方式访问服务器端，以获取文件上传进度情况，而是自己定时计算以上传的字节总数。因此当上传一个文件时，FLASH插件只会发一次传输请求，这样就改善了效率。
+	由于用FLASH传值时会给服务器造出一个新的SESSION，导致在服务端过滤器作用下可能会上传失败，因此用户可以在上专文件时，利用this.$swfUpload的addPostParam或者setPostParams方法，将原来的SESSION_id作为REQUEST参数传回服务端，服务端过滤器只要根据此SESSION_id判断相应用户是否“登录”即可.
+	本控件兼容IE6--IE8,Firefox,chrome浏览器，但需要FLASH PLAYER 9版本以上的支持
+
+-------------------------------------------------------
+/*文件上传器定义-GooUploader类*/
+//Div :要被绑定的已被JQUERY封装的DOM对象，必须要有其ID
+//property  :JSON变量，Progress的详细参数设置
+function GooUploader(Div,property)
+
+类内成员变量：
+	this.$div：      被绑定构造为SLIDER控件的JQUERY对象，原型一般为一个DIV
+	this.$width：	 控件的宽度，默认为300
+	this.$height：	 控件的高度，默认为30
+	this.$btn_add：  控件中“（批量）添加文件”按钮的JQUERY对象
+	this.$btn_upload：控件中“（批量）上传”按钮的JQUERY对象
+	this.$btn_cancel：控件中“（批量）取消上传”按钮的JQUERY对象
+	this.$btn_clean：控件中“清空列表”按钮的JQUERY对象
+	this.$div_btn：  保存了所有批量操作按钮的DIV框
+	this.$content：  文件列表框
+	this.$goon：     如果它不为空，则表示要连续上传完列表中所有文件
+	this.$swfUpload：一个控件内置的SWFUpload对象，可对其中进行相应的操作（详见附送的SWFUpload V2_2_0 说明文档.htm）
+	this.$multiple： 如果它为TRUE，则允许批量上传，如为FALSE，则为只允许单个文件一传。
+	this.$fileList： 保存文件信息JSON的列表，为一个JSON数组，以file_id为索引，而不是数字。
+	
+-----------------------------------------------------------------------------------
+	
+方法:
+//根据文件类型，判断应该用哪种样式
+this.fixFileTypeIcon(type)
+
+//跟据传入的文件字节大小,自动转换为KB,MB,GB等单位
+this.getFileSize(bytes)
+
+//获取上传列表中的所有文件名，用逗号隔开
+this.getFileNames
+
+//还有许多方法，是this.$swfUpload本身提供的，详见附送的SWFUpload V2_2_0 说明文档.htm，调用时书写格式为:  GooUploader类实例名.$swfUpload.方法名（传参）;
+-------------------------------------------------------------------
+
+最重要的传参：property，构造函数中要用到的：
+var property={
+	width:300,                                      //控件的宽度，默认时可不填
+	height:300,                                     //控件的高度，默认时可不填
+	multiple:true,                                  //如果它为TRUE，则允许批量上传，如为FALSE，则为只允许单个文件一传
+    //file_types:"*.jpg;*.gif",                     //可上传的文件类型，“如*.jpg;*.gif”，默认为“*.*”，用分号隔开
+    //file_types_description: "Web Image Files",    //可上传的文件类型描述文字，默认为All Files
+    post_params:post_params,                        //一个JSON数据，文件上传时一同传至服务器端的REUQUEST传参
+    btn_add_text:"添加",							//添加按钮显示文字
+    btn_up_text:"上传",                             //上传按钮显示文字（当multiple为FALSE时，此项无作作，不必填）
+    btn_cancel_text:"放弃",                         //取消按钮显示文字（当multiple为FALSE时，此项无作作，不必填）
+    btn_clean_text:"清空",                          //清空按钮显示文字（当multiple为FALSE时，此项无作作，不必填）
+    op_del_text:"单项删除",                         //文件列表中快捷操作图标“单项删除”的注释文字
+    op_up_text:"单项上传",                          //文件列表中快捷操作图标“单项上传”的注释文字
+    op_fail_text:"上传失败",                        //文件列表中快捷操作图标“上传失败”的注释文字
+    op_ok_text:"上传成功",                          //文件列表中快捷操作图标“上传成功”的注释文字
+    op_no_text:"取消上传",                          //文件列表中快捷操作图标“取消上传”的注释文字
+	upload_url:"UploadFileServlet"				    //上传目标服务器的相对路径，比必须是相对于SWF插件所在的路径，或者是绝对路径
+	flash_url : property.flash_url||"swfupload.swf",//SWF插件相对于网页文件所在相对路径
+	file_size_limit : file_size_limit||0,//文件大小限制，单位为KB，0表示大小无限制
+	file_upload_limit: file_upload_limit||0,//允许上传的最多文件数量,0表示大小无限制
+    file_queue_limit:property.file_queue_limit||0,
+};

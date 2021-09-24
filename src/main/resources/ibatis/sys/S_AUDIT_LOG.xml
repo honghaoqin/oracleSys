@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_AUDIT_LOG">
+    <select id="list" resultClass="hashmap" parameterClass="hashmap" remapResults="true">
+		 SELECT a.AUDIT_LOG_ID,a.USER_ID,a.USER_NAME,a.AUTH_ID,a.AUTH_NAME,a.DES,a.RZJB,a.CZSJ		 
+		 FROM S_AUDIT_LOG a
+		<isNotEmpty property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+		    <isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+		order by a.CZSJ desc		
+    </select>
+	
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_AUDIT_LOG a
+		    <isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+	
+	<select id="exists" parameterClass="hashmap"  resultClass="java.lang.Boolean">
+		SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_AUDIT_LOG a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+	
+	<insert id="insert" parameterClass="hashmap">
+		INSERT INTO S_AUDIT_LOG 
+		(AUDIT_LOG_ID,USER_ID,USER_NAME,AUTH_ID,AUTH_NAME,DES,CZSJ,RZJB)
+	     VALUES
+		(#AUDIT_LOG_ID#,#sessionUser.USER_ID#,#sessionUser.NAME#,#AUTH_ID#,
+		(SELECT NAME FROM S_AUTH where AUTH_ID='$AUTH_ID$'),#DES#,#CZSJ#,#RZJB#)
+	</insert>
+	
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_AUDIT_LOG 
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="USER_ID">
+				USER_ID = #USER_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="USER_NAME">
+				USER_NAME = #USER_NAME#
+			</isNotNull>
+			<isNotNull prepend="," property="AUTH_ID">
+				AUTH_ID = #AUTH_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="AUTH_NAME">
+				AUTH_NAME = #AUTH_NAME#
+			</isNotNull>
+			<isNotNull prepend="," property="DES">
+				DES = #DES#
+			</isNotNull>
+			<isNotNull prepend="," property="RZJB">
+				RZJB = #RZJB#
+			</isNotNull>
+			<isNotNull prepend="," property="CZSJ">
+				CZSJ = #CZSJ#
+			</isNotNull>
+			
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</update>
+	
+	 <delete id="delete" parameterClass="hashmap">
+       DELETE FROM S_AUDIT_LOG 
+		   <isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+     </delete>
+
+	
+</sqlMap>

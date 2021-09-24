@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_FILE">
+    <select id="list" resultClass="hashmap" parameterClass="hashmap" remapResults="true">
+		 SELECT a.ID,a.APPCODE,a.MODULECODE,a.P_ID,a.OBJ_ID,a.FILEPATH,a.FILENAME,a.FILESIZE,a.FILETYPE,
+		 a.UPLOADTYPE,a.STATUS,a.ISCONVERT,a.VERSION,a.CREATE_BY,a.FTP_PATH,a.NAME,a.THUMBNAIL_PATH,
+		 a.CREATED_DATE,a.IMG_WIDTH,a.IMG_HEIGHT  
+		   FROM S_FILE a  
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+    </select>
+	
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_FILE a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+	
+	<select id="exists" parameterClass="hashmap"
+		resultClass="java.lang.Boolean">
+		SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_FILE a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+	
+	<insert id="insert" parameterClass="hashmap">
+		INSERT INTO S_FILE a
+		(ID,APPCODE,MODULECODE,P_ID,OBJ_ID,FILEPATH,FILENAME,FILESIZE,FILETYPE,UPLOADTYPE,
+		STATUS,ISCONVERT,VERSION,CREATE_BY,CREATED_DATE,FTP_PATH,NAME,THUMBNAIL_PATH,IMG_WIDTH,IMG_HEIGHT )
+		VALUES
+		(#ID#,#APPCODE#,#MODULECODE#,#P_ID#,#OBJ_ID#,#FILEPATH#,#FILENAME#,#FILESIZE#,#FILETYPE#,
+		#UPLOADTYPE#,#STATUS#,#ISCONVERT#,#VERSION#,#CREATE_BY#,SYSDATE,#FTP_PATH#,#NAME#,#THUMBNAIL_PATH#,#IMG_WIDTH#,#IMG_HEIGHT#)
+	</insert>
+	
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_FILE 
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="ID">
+				ID = #ID#
+			</isNotNull>
+			<isNotNull prepend="," property="APPCODE">
+				APPCODE = #APPCODE#
+			</isNotNull>
+			<isNotNull prepend="," property="MODULECODE">
+				MODULECODE = #MODULECODE#
+			</isNotNull>
+			<isNotNull prepend="," property="P_ID">
+				P_ID = #P_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="OBJ_ID">
+				OBJ_ID = #OBJ_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="FILEPATH">
+				FILEPATH = #FILEPATH#
+			</isNotNull>
+			<isNotNull prepend="," property="FILENAME">
+				FILENAME = #FILENAME#
+			</isNotNull>
+			<isNotNull prepend="," property="FILESIZE">
+				FILESIZE = #FILESIZE#
+			</isNotNull>
+			<isNotNull prepend="," property="FILETYPE">
+				FILETYPE = #FILETYPE#
+			</isNotNull>
+			<isNotNull prepend="," property="UPLOADTYPE">
+				UPLOADTYPE = #UPLOADTYPE#
+			</isNotNull>
+			<isNotNull prepend="," property="STATUS">
+				STATUS = #STATUS#
+			</isNotNull>
+			<isNotNull prepend="," property="ISCONVERT">
+				ISCONVERT = #ISCONVERT#
+			</isNotNull>
+			<isNotNull prepend="," property="VERSION">
+				VERSION = #VERSION#
+			</isNotNull>
+			<isNotNull prepend="," property="CREATE_BY">
+				CREATE_BY = #CREATE_BY#
+			</isNotNull>
+			<isNotNull prepend="," property="FTP_PATH">
+				FTP_PATH = #FTP_PATH#
+			</isNotNull>
+			<isNotNull prepend="," property="NAME">
+				NAME = #NAME#
+			</isNotNull>
+			<isNotNull prepend="," property="THUMBNAIL_PATH">
+				THUMBNAIL_PATH = #THUMBNAIL_PATH#
+			</isNotNull>
+			<isNotNull prepend="," property="IMG_WIDTH">
+				IMG_WIDTH = #IMG_WIDTH#
+			</isNotNull>
+			<isNotNull prepend="," property="IMG_HEIGHT">
+				IMG_HEIGHT = #IMG_HEIGHT#
+			</isNotNull>
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</update>
+	
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM S_FILE 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</delete>
+	
+</sqlMap>

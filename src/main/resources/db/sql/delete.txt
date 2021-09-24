@@ -1,0 +1,9 @@
+delete from S_AUDIT_LOG;
+delete from S_AUTH;
+delete from S_DEPT;
+delete from S_DICT;
+delete from S_LOGIN_LOG;
+delete from S_ROLE;
+delete from S_ROLE_AUTH;
+delete from S_ROLE_USER;
+delete from S_USER;

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+    <constant name="struts.devMode" value="false" />
+ 	<constant name="struts.action.extension" value="do" />
+ 	<constant name="struts.i18n.encoding" value="UTF-8" />
+ 	<constant name="struts.ui.theme" value="simple" />
+ 	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+    <constant name="struts.enable.SlashesInActionNames" value="true" />
+    <constant name="struts.multipart.maxSize" value="1024000000" />
+    <constant name="struts.multipart.saveDir" value="d:/temp"></constant> 
+	<package name="ssi-default" extends="struts-default">
+        <result-types>
+            <result-type name="routing" class="com.ssi.framework.struts2.dispatcher.RoutingResult"/>
+        </result-types>
+        
+        <global-results>
+	        <result name="Timeout">/commons/timeout.jsp</result>
+			<result name="AuthError">/commons/autherror.jsp</result>
+			<result name="BusinessError">/commons/businesserror.jsp</result>
+			<result name="Error">/commons/error.jsp</result>
+      	</global-results>
+      	
+      	<global-exception-mappings>
+      		<exception-mapping result="Timeout" exception="com.ssi.framework.exceptions.TimeoutException"/>
+      		<exception-mapping result="AuthError" exception="com.ssi.framework.exceptions.AuthException"/>
+      		<exception-mapping result="BusinessError" exception="com.ssi.framework.exceptions.BusinessException"/>
+      		<exception-mapping result="Error" exception="java.lang.Exception"/>
+      	</global-exception-mappings>
+      	
+  	</package>
+    
+    <include file="struts/*.xml" />
+</struts>

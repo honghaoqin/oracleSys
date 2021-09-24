@@ -1,0 +1,1 @@
+INSERT INTO S_AUTH (AUTH_ID,NAME,PARENT_ID,PARAM,MENU,SORT) SELECT AUTH_ID,NAME,PARENT_ID,PARAM,MENU,SORT FROM (select 'S_BACKUP' AUTH_ID,'数据库备份' NAME, 'DEV' PARENT_ID, '/sys/Backup/list.do' PARAM, '1' MENU, '' SORT FROM dual) a where NOT EXISTS (select 1 from S_AUTH b where a.auth_id = b.auth_id);

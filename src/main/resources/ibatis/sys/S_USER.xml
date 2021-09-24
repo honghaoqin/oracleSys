@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_USER">
+	<!-- 查询记录 -->
+	<select id="list" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		 <![CDATA[ 
+		SELECT
+		a.USER_ID,a.LOGIN_ID,a.NAME,a.PSW,a.START_DT,a.END_DT,a.DEPT_ID,a.TELLPHONE,a.PHONE,a.EMAIL,
+		a.UPDATED_BY,a.UPDATED_DATE,a.CREATED_BY,a.CREATED_DATE,a.REMARK,a.PAGE_SIZE,a.STYLESHEET,
+		a.LOGIN_DT,a.POSITION_ID ,a.RESOLUTION,a.WEIXIN_ID
+		FROM S_USER a
+		]]>
+		<isNotEmpty property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_USER a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<select id="exists" parameterClass="hashmap" resultClass="java.lang.Boolean">
+	    SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_USER  a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="hashmap">
+		INSERT INTO S_USER 
+		(USER_ID,LOGIN_ID,NAME,PSW,START_DT,END_DT,DEPT_ID,TELLPHONE,PHONE,EMAIL,CREATED_BY,CREATED_DATE
+		,REMARK,PAGE_SIZE,STYLESHEET,LOGIN_DT,POSITION_ID,RESOLUTION,WEIXIN_ID)
+		VALUES
+		(#SYS_GUID#,#LOGIN_ID#,#NAME#,#PSW#,#START_DT#,#END_DT#,#DEPT_ID#,#TELLPHONE#,#PHONE#,#EMAIL#,#sessionUser.USER_ID#,
+		#CREATED_DATE#,#REMARK#,#PAGE_SIZE#,#STYLESHEET#,#LOGIN_DT#,#POSITION_ID#,#RESOLUTION#,#WEIXIN_ID#)
+	</insert>
+
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_USER 
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="LOGIN_ID">
+				LOGIN_ID = #LOGIN_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="NAME">
+				NAME = #NAME#
+			</isNotNull>
+			<isNotNull prepend="," property="PSW">
+				PSW = #PSW#
+			</isNotNull>
+			
+			<isNotNull prepend="," property="START_DT">
+				START_DT =#START_DT#
+			</isNotNull>
+			<isNotNull prepend="," property="END_DT">
+				END_DT =#END_DT#
+			</isNotNull>
+			<isNotNull prepend="," property="ZW">
+				ZW = #ZW#
+			</isNotNull>
+			<isNotNull prepend="," property="DEPT_ID">
+				DEPT_ID = #DEPT_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="TELLPHONE">
+				TELLPHONE = #TELLPHONE#
+			</isNotNull>
+			<isNotNull prepend="," property="PHONE">
+				PHONE = #PHONE#
+			</isNotNull>
+			<isNotNull prepend="," property="EMAIL">
+				EMAIL = #EMAIL#
+			</isNotNull>
+			<isNotNull prepend="," property="sessionUser">
+				UPDATED_BY =#sessionUser.USER_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="UPDATED_DATE">
+				UPDATED_DATE =#UPDATED_DATE#
+			</isNotNull>
+			<isNotNull prepend="," property="REMARK">
+				REMARK = #REMARK#
+			</isNotNull>
+			<isNotNull prepend="," property="PAGE_SIZE">
+				PAGE_SIZE = #PAGE_SIZE#
+			</isNotNull>
+			<isNotNull prepend="," property="STYLESHEET">
+				STYLESHEET = #STYLESHEET#
+			</isNotNull>
+			<isNotNull prepend="," property="LOGIN_DT">
+				LOGIN_DT =#LOGIN_DT#
+			</isNotNull>
+
+			<isNotNull prepend="," property="POSITION_ID">
+				POSITION_ID = #POSITION_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="RESOLUTION">
+				RESOLUTION = #RESOLUTION#
+			</isNotNull>
+			<isNotNull prepend="," property="WEIXIN_ID">
+				WEIXIN_ID = #WEIXIN_ID#
+			</isNotNull>
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</update>
+
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM S_USER 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</delete>
+
+	<select id="checkUnique" parameterClass="java.util.Map"
+		resultClass="java.lang.Boolean">
+		  SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_USER  where LOGIN_ID=#LOGIN_ID#
+	</select>
+	
+	
+	<delete id="deleteRoleUser" parameterClass="hashmap">
+		DELETE FROM S_ROLE_USER 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</delete>
+</sqlMap>

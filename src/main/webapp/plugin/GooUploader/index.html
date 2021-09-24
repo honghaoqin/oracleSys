@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>文件上传控件GooUploader</title>
+<link rel="stylesheet" type="text/css" href="codebase/GooUploader.css"/>
+<script  type="text/javascript" src="codebase/jquery-1.3.2.min.js"></script>
+<script  type="text/javascript" src="codebase/GooUploader.js"></script>
+<script type="text/javascript" src="codebase/swfupload/swfupload.js"></script>
+<script type="text/javascript">
+var demo1,demo2;
+var  post_params = {session_id:"f1423rwe543t4wrtwerwe"};
+var property2={
+	width:300,
+	height:300,
+	multiple:true,
+    //file_types:"*.jpg;*.gif",
+    //file_types_description: "Web Image Files",
+    post_params:post_params,
+    btn_add_text:"添加",
+    btn_up_text:"上传",
+    btn_cancel_text:"放弃",
+    btn_clean_text:"清空",
+    op_del_text:"单项删除",
+    op_up_text:"单项上传",
+    op_fail_text:"上传失败",
+    op_ok_text:"上传成功",
+    op_no_text:"取消上传",
+	upload_url:"UploadFileServlet"
+};
+var property1={
+	multiple:false,
+    //file_types:"*.jpg;*.gif",
+    //file_types_description: "Web Image Files",
+    post_params:post_params,
+    btn_add_text:"添加",
+    op_del_text:"单项删除",
+    op_up_text:"单项上传",
+    op_fail_text:"上传失败",
+    op_ok_text:"上传成功",
+    op_no_text:"取消上传",
+	upload_url:"UploadFileServlet"
+};
+$(document).ready(function(){
+  demo2=$.createGooUploader($("#demo2"),property2)
+  demo1=$.createGooUploader($("#demo1"),property1);
+  //demo1.$swfUpload.setPostParams(post_params);
+});
+</script>
+</head>
+
+<body>
+<br/>
+<div id="demo" class="Uploader" style="height:200px;width:250px;">
+  <div class="total_bg">
+    <div class="oper" style="width:240px;">
+      <div class="upload_btn" style="margin-right:4px;"><div class="left"></div><div><b class="add">添加</b></div><div class="right"></div></div>
+      <div class="upload_btn"><div class="left"></div><div><b class="upload">上传</b></div><div class="right"></div></div>
+      <div class="upload_btn" style="float:right"><div class="left"></div><div><b class="clean">清空</b></div><div class="right"></div></div>
+    </div>
+    <div class="content" style="height:164px;width:238px;">
+      <li><b class="zip"></b><div class="labe"><div class="file">fdfsadfasdfsdf.rar</div><div class="bar"></div><span>100%</span></div><b class="op_no"></b></li>
+      <li><b class="doc"></b><div class="labe"><div class="file">gsetasefd.doc</div><div class="bar"></div></div><span>100%</span><b class="op_ok"></b></li>
+      <li><b class="cfg"></b><div class="labe"><div class="file">gsetasefd.ppt</div><div class="unbar"></div></div><span></span><b class="op_del"></b><b class="op_up"></b></li>
+      <li><b class="exe"></b><div class="labe"><div class="file">gsetasefd.exe</div><div class="bar"></div></div><span>100%</span><b class="op_fail" style="display:block"></b></li>
+      <li><b class="dvd"></b><div class="labe"><div class="file">gsetasefd.wmv</div><div class="bar"></div></div><span>100%</span></li>
+      <li><b class="xls"></b><div class="labe"><div class="file">gsetasefd.xls</div><div class="bar"></div></div><span>100%</span></li>
+      <li><b class="scr"></b><div class="labe"><div class="file">gsetasefd.cpp</div><div class="bar"></div></div><span>100%</span></li>
+    </div>
+  </div>
+</div>
+<br/>
+<div id="demo1"></div>
+<div id="demo2"></div>
+<input type="button" value="test" onclick="alert(demo1.$fileList.length)"/>
+<input name="" type="file" />
+</body>
+</html>

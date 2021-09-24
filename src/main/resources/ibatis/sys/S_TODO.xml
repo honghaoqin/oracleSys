@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_TODO">
+	<select id="list" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT
+		a.TODO_ID,a.USER_ID,a.DEPT_ID,a.TODO_TYPE,a.MANUSER_ID,a.OBJ_ID,a.OBJ_URL,a.MONSTARTIME,
+		a.MONENDTIME,a.MSG,a.DODEGREE,a.MONTIME,a.NOMON,a.ISSCAN
+		FROM S_TODO a
+		<isNotEmpty property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+		order by a.MONTIME asc
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_TODO a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<select id="exists" parameterClass="hashmap" resultClass="java.lang.Boolean">
+		SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_TODO  a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<insert id="insert" parameterClass="hashmap">
+		INSERT INTO S_TODO
+		(TODO_ID,USER_ID,DEPT_ID,TODO_TYPE,MANUSER_ID,OBJ_ID,OBJ_URL,MONSTARTIME,MONENDTIME,MSG,DODEGREE,MONTIME,NOMON,ISSCAN)
+		VALUES
+		(#TODO_ID#,#USER_ID#,#DEPT_ID#,#TODO_TYPE#,#MANUSER_ID#,#OBJ_ID#,#OBJ_URL#,#MONSTARTIME#,#MONENDTIME#,#MSG#,#DODEGREE#,#MONTIME#,#NOMON#,#ISSCAN#)
+	</insert>
+
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_TODO
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="USER_ID">
+				USER_ID = #USER_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="DEPT_ID">
+				DEPT_ID = #DEPT_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="TODO_TYPE">
+				TODO_TYPE = #TODO_TYPE#
+			</isNotNull>
+			<isNotNull prepend="," property="MANUSER_ID">
+				MANUSER_ID = #MANUSER_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="OBJ_ID">
+				OBJ_ID = #OBJ_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="OBJ_URL">
+				OBJ_URL = #OBJ_URL#
+			</isNotNull>
+			<isNotNull prepend="," property="MONSTARTIME">
+				MONSTARTIME =#MONSTARTIME#
+			</isNotNull>
+			<isNotNull prepend="," property="MONENDTIME">
+				MONENDTIME =#MONENDTIME#
+			</isNotNull>
+			<isNotNull prepend="," property="MSG">
+				MSG = #MSG#
+			</isNotNull>
+			<isNotNull prepend="," property="DODEGREE">
+				DODEGREE = #DODEGREE#
+			</isNotNull>
+			<isNotNull prepend="," property="MONTIME">
+				MONTIME =#MONTIME#
+			</isNotNull>
+			<isNotNull prepend="," property="NOMON">
+				NOMON = #NOMON#
+			</isNotNull>
+			<isNotNull prepend="," property="ISSCAN">
+				ISSCAN = #ISSCAN#
+			</isNotNull>
+
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</update>
+
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM S_TODO
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</delete>
+
+
+</sqlMap>

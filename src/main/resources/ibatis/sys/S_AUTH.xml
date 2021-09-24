@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_AUTH">
+	<!-- 查询记录，把父的名称也查出来 -->
+	<select id="list" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT
+		a.AUTH_ID,a.NAME,a.PARENT_ID,a.PARAM,a.MENU,a.ICONS,a.SORT,a.REMARK,a.TARGET,a.UPDATED_BY,
+		a.UPDATED_DATE,a.CREATED_BY,a.CREATED_DATE,b.name as PARENT_NAME
+		FROM S_AUTH a
+		left join S_AUTH b on (a.parent_id = b.auth_id)
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+		order by a.parent_id,a.SORT,a.AUTH_ID asc
+	</select>
+
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_AUTH a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</select>
+
+	<select id="exists" parameterClass="hashmap" resultClass="java.lang.Boolean">
+		SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_AUTH a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+		
+	</select>
+
+	<insert id="insert" parameterClass="hashmap">
+		INSERT INTO S_AUTH 
+		(AUTH_ID,NAME,PARENT_ID,PARAM,MENU,ICONS,SORT,REMARK,TARGET,CREATED_BY,CREATED_DATE)
+		VALUES
+		(#AUTH_ID#,#NAME#,#PARENT_ID#,#PARAM#,#MENU#,#ICONS#,
+		(select nvl(max(sort),0)+1 from S_AUTH where 1=1
+		<isNotEmpty property="PARENT_ID">
+			and PARENT_ID = #PARENT_ID#
+		</isNotEmpty>
+		<isEmpty property="PARENT_ID">
+			and PARENT_ID is null
+		</isEmpty>
+		)
+		,#REMARK#,#TARGET#,#sessionUser.USER_ID#,SYSDATE)
+	</insert>
+
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_AUTH 
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="NAME">
+				NAME = #NAME#
+			</isNotNull>
+			<isNotNull prepend="," property="PARENT_ID">
+				PARENT_ID = #PARENT_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="PARAM">
+				PARAM = #PARAM#
+			</isNotNull>
+			<isNull prepend="," property="MENU">
+				MENU = null
+			</isNull>
+			<isNotNull prepend="," property="MENU">
+				MENU = #MENU#
+			</isNotNull>
+			<isNotNull prepend="," property="ICONS">
+				ICONS = #ICONS#
+			</isNotNull>
+			<isNotNull prepend="," property="SORT">
+				SORT = #SORT#
+			</isNotNull>
+			<isNotNull prepend="," property="REMARK">
+				REMARK = #REMARK#
+			</isNotNull>
+			<isNotNull prepend="," property="TARGET">
+				TARGET = #TARGET#
+			</isNotNull>
+			
+			<isNotNull prepend="," property="sessionUser">
+				UPDATED_BY =
+				#sessionUser.USER_ID#,UPDATED_DATE = SYSDATE
+			</isNotNull>
+
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</update>
+
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM S_AUTH 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</delete>
+
+
+	<!-- 删除记录时，更新父记录 -->
+	<update id="updateParentId" parameterClass="hashmap">
+		UPDATE S_AUTH 
+		<dynamic prepend="set">
+			PARENT_ID = null,
+			<isNotNull prepend="," property="sessionUser">
+				UPDATED_BY =
+				#sessionUser.USER_ID#,UPDATED_DATE = SYSDATE
+			</isNotNull>
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$
+		</isNotEmpty>
+	</update>
+	
+	<!-- 获取角色的权限 -->
+	<select id="selectRoleAuth" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT
+		a.AUTH_ID,a.NAME,a.PARENT_ID,a.PARAM,a.MENU,a.ICONS,a.SORT,a.REMARK,a.TARGET
+		from S_AUTH a
+		<isNotEmpty property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+		 join (select distinct auth_id from s_role_auth where
+		role_id=#ROLE_ID#) b
+		on (a.auth_id = b.auth_id)
+		order by a.parent_id,a.sort
+	</select>
+	
+	
+	<!-- 获取角色的权限 -->
+	<select id="selectAuth" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT
+		a.AUTH_ID,a.NAME,a.PARENT_ID,a.PARAM,a.MENU,a.ICONS,a.SORT,a.REMARK,a.TARGET,a.UPDATED_BY,to_char(a.UPDATED_DATE,'yyyy-mm-dd hh24:mi:ss')
+		UPDATED_DATE,a.CREATED_BY,to_char(a.CREATED_DATE,'yyyy-mm-dd hh24:mi:ss') CREATED_DATE ,DECODE (b.auth_id, null, '0', '1') as checked
+		from S_AUTH a
+		<isNotEmpty property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+
+		left join (select distinct auth_id from s_role_auth where
+		role_id=#ROLE_ID#) b
+		on (a.auth_id = b.auth_id)
+		order by a.parent_id,a.sort
+	</select>
+	<!-- 获取当前登录用户的菜单 -->
+	<select id="selectMenu" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT distinct
+		a.AUTH_ID,a.NAME,a.PARENT_ID,a.PARAM,a.MENU,a.ICONS,a.SORT,a.REMARK,a.TARGET,a.UPDATED_BY,to_char(a.UPDATED_DATE,'yyyy-mm-dd hh24:mi:ss')
+		UPDATED_DATE,a.CREATED_BY,to_char(a.CREATED_DATE,'yyyy-mm-dd hh24:mi:ss') CREATED_DATE 
+		from S_AUTH a
+		inner join s_role_auth b on (a.auth_id = b.auth_id)
+		inner join s_role_user c on (b.role_id = c.role_id)
+		where a.menu='1' and c.user_id=#sessionUser.USER_ID#
+		<isNotEmpty property="PARENT_ID">
+			start with a.PARENT_ID=#PARENT_ID# connect by prior a.AUTH_ID =
+			a.PARENT_ID
+		</isNotEmpty>
+		<isNotEmpty prepend=" " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+		order by a.parent_id,a.sort
+	</select>
+	<!-- 获取用户的权限 -->
+	<select id="viewAtuah" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT distinct
+		a.AUTH_ID,a.NAME,a.PARENT_ID,a.PARAM,a.MENU,a.ICONS,a.SORT,a.REMARK,a.TARGET,a.UPDATED_BY,to_char(a.UPDATED_DATE,'yyyy-mm-dd
+		hh24:mi:ss')
+		UPDATED_DATE,a.CREATED_BY,to_char(a.CREATED_DATE,'yyyy-mm-dd
+		hh24:mi:ss') CREATED_DATE
+		from S_AUTH a
+		inner join s_role_auth b on (a.auth_id = b.auth_id)
+		inner join s_role_user c on (b.role_id = c.role_id)
+
+		where c.user_id=#USER_ID#
+		order by a.parent_id,a.sort
+	</select>
+	<!-- 判断用户权限(没有权返回一行结果,否则有权限) -->
+	<select id="checkAuth" resultClass="hashmap" parameterClass="hashmap"
+		remapResults="true">
+		SELECT
+		a.AUTH_ID,a.NAME,a.PARENT_ID,a.PARAM,a.MENU,a.ICONS,a.SORT,a.REMARK,a.TARGET,a.UPDATED_BY,to_char(a.UPDATED_DATE,'yyyy-mm-dd
+		hh24:mi:ss')
+		UPDATED_DATE,a.CREATED_BY,to_char(a.CREATED_DATE,'yyyy-mm-dd
+		hh24:mi:ss') CREATED_DATE
+		from S_AUTH a
+		where a.auth_id=#AUTH_ID#
+		and not exists(
+		SELECT 1
+		from S_AUTH a
+		inner join s_role_auth b on (a.auth_id = b.auth_id)
+		inner join s_role_user c on (b.role_id = c.role_id)
+		where c.user_id=#USER_ID# and a.auth_id=#AUTH_ID#
+		)
+	</select>
+
+	<!-- 移动排序 -->
+	<procedure id="MOVE_SORT" parameterClass="hashmap">
+		{call
+		s_auth_move_sort (#ID#,#STEP#)}
+	</procedure>
+
+</sqlMap>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:task="http://www.springframework.org/schema/task"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd"
+	   default-autowire="byName" default-lazy-init="false">
+	   
+	<!-- 读取配置文件 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 数据源定义 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+
+		<property name="initialSize" value="5" />
+		<!-- 连接池的最大数据库连接数。设为non-positive表示无限制 -->
+		<property name="maxActive" value="-1" />
+		<!--最大空闲数，数据库连接的最大空闲时间。超过空闲时间，数据库连接将被标记为不可用，然后被释放。设为negative表示无限制 -->
+		<property name="maxIdle" value="20" />
+		<!-- 连接池中最小的空闲的连接数，低于这个数量会被创建新的连接 -->
+		<property name="minIdle" value="3" />
+		<!-- 最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。 -->
+		<property name="maxWait" value="60000" />
+		<!-- 超过removeAbandonedTimeout时间后，是否进 行没用连接（废弃）的回收（默认为false，调整为true) -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 超过时间限制，回收没有用(废弃)的连接（默认为 300秒，调整为180） -->
+		<property name="removeAbandonedTimeout" value="180" />
+		
+		<!-- 取得连接时是否进行有效性验证 -->
+		<property name="testOnBorrow" value="false" />
+		<!-- 返回连接时是否进行有效性验证 -->
+		<property name="testOnReturn" value="false" />
+		<!-- 连接空闲时是否进行有效性验证 -->
+		<property name="testWhileIdle" value="true" />
+		<!-- 以毫秒表示空闲对象回收器由运行间隔。值为负数时表示不运行空闲对象回收器。若需要回收, 该值最好小于 minEvictableIdleTimeMillis 值。 -->
+		<property name="timeBetweenEvictionRunsMillis" value="300000" />
+		<!-- 若需要回收, 该值最好小于DB中的 wait_timeout 值(mysql默认8个小时) -->
+		<property name="minEvictableIdleTimeMillis" value="320000" />
+		<!-- 代表每次检查链接的数量，建议设置和maxActive一样大，这样每次可以有效检查所有的链接. -->
+		<property name="numTestsPerEvictionRun" value="-1" />
+		<!-- 检查SQL语句 -->
+		<property name="validationQuery" value="select 1 from dual" />
+		
+		<property name="poolPreparedStatements" value="false" />
+		<property name="defaultAutoCommit" value="false" />
+	</bean>
+    	
+    <!-- 事务 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+	<!-- 以 @Transactional 标注来定义事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+	
+    <!-- ibatis 指定sqlExecutor -->
+    <bean id="sqlMapClient" class="com.ssi.framework.ibatis.spring.SqlMapClientFactoryBean">
+        <property name="configLocation">
+            <value>classpath:sql-map-config.xml</value>
+        </property>
+        <property name="mappingLocations">
+        	<value>classpath*:/ibatis/*/*.xml</value>
+        </property>
+        <property name="dataSource" ref="dataSource"/>
+        
+        <!-- 指定数据库分页方言Dialect-->
+        <property name="sqlExecutor">
+        	<bean class="com.ssi.framework.ibatis.sqlmap.engine.execution.LimitSqlExecutor">
+        		<property name="dialect">
+        			<bean class="${jdbc.dialect}"/>
+        		</property>
+        	</bean>
+        </property>
+    </bean>
+
+    <!-- component-scan自动搜索@Component , @Controller , @Service , @Repository等标注的类 -->
+	<context:component-scan base-package="com.ssi"/>
+	
+	<!--  定时器开关 !-->
+	<task:annotation-driven/>
+	<bean id="springUtils" class="com.ssi.framework.spring.SpringUtils" lazy-init="false"/>
+</beans>

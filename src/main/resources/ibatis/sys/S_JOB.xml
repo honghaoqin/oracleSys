@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 代码生成请勿手工修改 -->
+
+<!DOCTYPE sqlMap
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="S_JOB">
+    <select id="list" resultClass="hashmap" parameterClass="hashmap" remapResults="true">
+		 SELECT a.JOB_ID,a.DES,a.CLS,a.START_TIME,a.END_TIME,a.DURABILITY,a.VOLATILITY,
+		 a.RECOVER,a.EXPRESSION,a.CAL1,a.CAL2,a.CAL3,a.CAL4,a.CAL5,a.CAL6,a.CAL7,a.CAL8,
+		 a.CAL9,a.CAL10,a.ISSTART,a.UPDATED_BY,a.UPDATED_DATE,a.CREATED_DATE,a.CREATED_BY
+	   FROM S_JOB a
+		<isNotEmpty property="JOIN_SQL">$JOIN_SQL$</isNotEmpty>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+    </select>
+	
+	<select id="count" resultClass="int">
+		SELECT count(1) FROM S_JOB a
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+	
+	<select id="exists" parameterClass="hashmap"
+		resultClass="java.lang.Boolean">
+		SELECT case when count(1)&gt;0 then 1 else 0 end as VALUE FROM S_JOB a
+		<isNotEmpty prepend=" WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</select>
+	
+	<insert id="insert" parameterClass="hashmap">
+		INSERT INTO S_JOB a
+		(JOB_ID,DES,CLS,START_TIME,END_TIME,DURABILITY,VOLATILITY,RECOVER,EXPRESSION,CAL1,CAL2,CAL3,
+		CAL4,CAL5,CAL6,CAL7,CAL8,CAL9,CAL10,ISSTART,CREATED_DATE,CREATED_BY)
+		VALUES
+		(#JOB_ID#,#DES#,#CLS#,#START_TIME#,#END_TIME#,#DURABILITY#,#VOLATILITY#,
+		#RECOVER#,#EXPRESSION#,#CAL1#,#CAL2#,#CAL3#,#CAL4#,#CAL5#,#CAL6#,#CAL7#,
+		#CAL8#,#CAL9#,#CAL10#,#ISSTART#,#CREATED_DATE#,#sessionUser.USER_ID#)
+	</insert>
+	
+	<update id="update" parameterClass="hashmap">
+		UPDATE S_JOB 
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="DES">
+				DES = #DES#
+			</isNotNull>
+			<isNotNull prepend="," property="CLS">
+				CLS = #CLS#
+			</isNotNull>
+			<isNotNull prepend="," property="START_TIME">
+				START_TIME =#START_TIME#
+			</isNotNull>
+			<isNotNull prepend="," property="END_TIME">
+				END_TIME =#END_TIME#
+			</isNotNull>
+			<isNotNull prepend="," property="DURABILITY">
+				DURABILITY = #DURABILITY#
+			</isNotNull>
+			<isNotNull prepend="," property="VOLATILITY">
+				VOLATILITY = #VOLATILITY#
+			</isNotNull>
+			<isNotNull prepend="," property="RECOVER">
+				RECOVER = #RECOVER#
+			</isNotNull>
+			<isNotNull prepend="," property="EXPRESSION">
+				EXPRESSION = #EXPRESSION#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL1">
+				CAL1 = #CAL1#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL2">
+				CAL2 = #CAL2#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL3">
+				CAL3 = #CAL3#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL4">
+				CAL4 = #CAL4#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL5">
+				CAL5 = #CAL5#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL6">
+				CAL6 = #CAL6#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL7">
+				CAL7 = #CAL7#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL8">
+				CAL8 = #CAL8#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL9">
+				CAL9 = #CAL9#
+			</isNotNull>
+			<isNotNull prepend="," property="CAL10">
+				CAL10 = #CAL10#
+			</isNotNull>
+			<isNotNull prepend="," property="ISSTART">
+				ISSTART = #ISSTART#
+			</isNotNull>
+			<isNotNull prepend="," property="sessionUser">
+				UPDATED_BY = #sessionUser.USER_ID#
+			</isNotNull>
+			<isNotNull prepend="," property="UPDATED_DATE">
+				UPDATED_DATE = #UPDATED_DATE#
+			</isNotNull>
+		</dynamic>
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</update>
+	
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM S_JOB 
+		<isNotEmpty prepend="WHERE 1=1 " property="WHERE_SQL">$WHERE_SQL$</isNotEmpty>
+	</delete>
+	
+</sqlMap>
